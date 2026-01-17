@@ -1,0 +1,29 @@
+[project]
+name = "worldlabs-api-python"
+version = "0.1.0"
+description = "World Labs public API Python client with splat helpers."
+readme = "README.md"
+authors = [
+    { name = "Ben Mildenhall", email = "bmild@worldlabs.ai" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.27.0",
+    "mediapy>=1.2.0",
+    "numpy>=1.26.0",
+    "pydantic>=2.7.0",
+    "spz @ git+https://github.com/nianticlabs/spz.git",
+    "structlog>=24.1.0",
+    "torch>=2.3.0",
+    "gsplat>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/worldlabs_api"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
