@@ -34,6 +34,7 @@ def load_spz(path: pathlib.Path) -> Gaussian3D:
     """
 
     cloud = spz.load_spz(str(path))
+    cloud.convert_coordinates(spz.CoordinateSystem.RDF, spz.CoordinateSystem.RUB)
 
     # Load raw data from GaussianCloud
     positions = torch.as_tensor(cloud.positions).view(-1, 3)
@@ -53,13 +54,6 @@ def load_spz(path: pathlib.Path) -> Gaussian3D:
 
     # Convert quaternion from (x, y, z, w) to (w, x, y, z) for gsplat
     rotations_wxyz = rotations_xyzw[:, [3, 0, 1, 2]]
-
-    # Convert splat world space -Y up to +Y up (by also negating Z).
-    positions = positions @ torch.diag(torch.tensor([1.0, -1.0, -1.0]))
-    # Negate y and z in the quaternion to rotate 180 degrees around x:
-    rotations_wxyz = rotations_wxyz * torch.tensor(
-        [1.0, 1.0, -1.0, -1.0], dtype=rotations_wxyz.dtype, device=rotations_wxyz.device
-    )
 
     return Gaussian3D(
         mean=positions,
